@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+    <style>
+    .groot {
+    font-size: 3rem;
+    }
+
+    
+    .vet {
+    font-weight: bold;
+    }
+
+    .rand {
+    border: 2px solid black;
+    }
+
+    .ruimte {
+    padding: 1rem;
+    }
+
+    .achtergrond {
+    background-color: green;
+    }
+
+
+    </style>
+</head>
+<body>
+    <div id="app">
+      <h1>{{ titel }}</h1>
+      <p>Mijn volledige naam is: {{ voornaam }} {{ naam }}</p>
+      <a :href="link">Link naar Google</a><br>
+      <img :src="url"><br>
+      <label>Getrouwd?</label><br>
+      <input type="checkbox" :checked="getrouwd"><br>
+      <button :disabled="magVerzenden">Verzenden</button>
+      <p :style="{ backgroundColor: 'blue'}">Deze tekst krijgt een blauwe achtergrond</p>
+      <p :style="stijl">Deze tekst werd opgemaakt via een object uit de data-eigenschappen</p>
+      <p :class="{ groot: true, vet: false }">Grote en niet-vette tekst</p>
+      <p :class="{ groot: true, vet: true }">Grote en vette tekst</p>
+      <p :class="{ groot: false, vet: true }">Normale grootte en vette tekst</p>
+      <p :style="stijl">Deze tekst werd opgemaakt via een object uit de data-eigenschappen</p>
+      <p :class="klassen">Klasselijst via object uit data-eigenschap</p>
+      <p :style="[algemeen, { color: 'red' }]">Algemene stijl uit data-eigenschap, plus rode tekstkleur.</p>
+      <p :class="['vet', blok]">Vette tekst met klassenlijst voor blokopmaak uit data-eigenschap.</p>
+
+       <button @click="teller += 1">Verhoog teller</button>
+       <p>Waarde van teller is {{ teller }}</p>
+       <p>{{ plaatsGroet() }}</p>
+       <p>Het resultaat van 10 gedeeld door 5 is: {{ deling(10, 5) }}</p>
+       <button @click="toonBoodschap">Toon boodschap</button>
+        <p @:mouseenter="veranderAchtergrond">
+        De achtergrond van deze alinea wordt veranderd wanneer de muis de alinea betreedt.
+        </p>
+        <p @mouseenter="veranderAchtergrond($event, 'yellow')">
+                De achtergrond van deze alinea wordt veranderd wanneer de muis de alinea betreedt.
+        </p>
+        <p>Geef commentaar: <input @keyup.esc="leegmaken"></p>          
+        <p>Schrijf een kort tekstje: <textarea @keyup.a="tellerA += 1" ></textarea></p>
+        <p>Aantal keer 'a' getypt: {{ tellerA }}</p>
+        <p @click.ctrl="verklein">Blok wordt kleiner bij CTRL + linkermuisknop</p>
+        <p>Geef tekst in (druk ALT + c om alles in hoofdletters te zetten)
+        <input type="text" @:keyup.alt.c="naarHoofdletters"></p>
+        <button @click="genereerGetal">Willekeurig getal</button>
+        <br>
+        Het getal is {{ willekeurigGetal }}
+        <p>
+            <input type="text" v-model="invoer">
+            <br>
+            De invoer van de gebruiker is: {{ invoer }}
+        </p>
+        <p>
+            <input type="radio" name="smaak" value="Vanille" v-model="smaak">Vanille<br>
+            <input type="radio" name="smaak" value="Mokka" v-model="smaak">Mokka<br>
+            <input type="radio" name="smaak" value="Aardbei" v-model="smaak">Aardbei<br>
+            <input type="radio" name="smaak" value="Banaan" v-model="smaak">Banaan<br>
+            Gekozen smaak: {{ smaak }}
+        </p>
+        <p>
+            <input type="checkbox" name="voorwaarden" v-model="akkoord">Akkoord met voorwaarden?<br>
+            De gebruiker gaat {{ akkoord ? "" : "niet" }} akkoord met de voorwaarden.
+        </p>
+        <p>
+            Kies je interesses:<br>
+            <input type="checkbox" name="interesses" v-model="interesses" value="Sport">Sport<br>
+            <input type="checkbox" name="interesses" v-model="interesses" value="Muziek">Muziek<br>
+            <input type="checkbox" name="interesses" v-model="interesses" value="Javascript">Javascript<br>
+            <input type="checkbox" name="interesses" v-model="interesses" value="Koken">Koken<br>
+        
+            <!-- De arrayfunctie join() concateneert de elementen, met de meegegeven string als seperator -->
+            De gebruiker is geïnteresseerd in: {{ interesses.join(', ') }}
+        </p>
+
+        <p>
+<!--                 value attribuut en de tekst die tussen de openings- en sluitingstag van het option-element staat identiek zijn ==> value weglaten   
+     <select name="huisdier" v-model="huisdier">
+        <option>Hond</option>
+        <option>Kat</option>
+        <option>Hamster</option>
+        <option>Vis</option>
+    </select><br>   
+ -->    <select name="huisdier" v-model="huisdier">
+        <option value="Hond">Hond</option>
+        <option value="Kat">Kat</option>
+        <option value="Hamster">Hamster</option>
+        <option value="Vis">Vis</option>
+    </select><br>
+    De gebruiker heeft een {{ huisdier }}
+</p>
+<p>
+        Uitgenodigden:
+        <select name="uitgenodigden" v-model="uitgenodigden" multiple>
+            <option value="Terry">Terry</option>
+            <option value="Bart">Bart</option>
+            <option value="Diana">Diana</option>
+            <option value="Youssef">Youssef</option>
+        </select><br>
+        De uitgenodigden zijn {{ uitgenodigden.join(", ") }}
+    </p>
+    <p>
+            Het thema van vandaag is {{ thema ? thema.toUpperCase() : "onbekend" }}
+     </p>
+     <p>
+            Het thema van vandaag is {{ toonThema() }}
+        </p>
+        
+        <p>
+                Het thema van vandaag is computed {{ themaHoofdletters }}
+         </p>
+         <h1 :style="kopStijl">Computed Properties en v-bind</h1>
+         <p>
+                De even getallen in de lijst zijn: {{ getallenEven.join(", ") }}
+            </p>
+      <p v-if="!ingelogd">
+                Log in om de applicatie te gebruiken!
+                <button @click="ingelogd = true">Inloggen</button>
+     </p>
+     <p v-else-if="ingelogd && admin">
+        Dank u voor het inloggen! U hebt administratieve rechten.
+        <button @click="ingelogd = false">Uitloggen</button>
+    </p>
+     <p v-else>
+        Dank u voor het inloggen!
+        <button @click="ingelogd = false">Uitloggen</button>
+    </p>
+    <p>
+        Mijn status is samenwonend: <input type="checkbox" v-model="samenwonend">
+    </p>
+    <p v-show="samenwonend">
+        Naam partner: <input type="text">
+    </p>
+    <p>
+        <input type="checkbox" id="genoten" v-model="genoten"><label for="genoten"> Ik heb genoten van mijn reis</label>
+    </p>
+    
+    <!-- Waarde blijft bestaan -->
+    <p v-if="genoten">
+        <label for="redengenoten">Reden dat u genoten heeft:</label><br>
+        <textarea id="redengenoten" cols="30" rows="3"></textarea>
+    </p>
+    
+    <p v-else>
+        <label for="redennietgenoten">Reden dat u niet genoten heeft:</label><br>
+        <textarea id="redennietgenoten" cols="30" rows="3"></textarea>
+    </p>
+    <p>
+        <input type="checkbox" id="genoten" v-model="genoten"><label for="genoten"> Ik heb genoten van mijn reis</label>
+    </p>
+    
+
+    <p v-if="genoten">
+        <label for="redengenoten">Reden dat u genoten heeft:</label><br>
+        <textarea id="redengenoten" cols="30" rows="3" key="reden-genoten"></textarea>
+    </p>
+    
+    <p v-else>
+        <label for="redennietgenoten">Reden dat u niet genoten heeft:</label><br>
+        <textarea id="redennietgenoten" cols="30" rows="3" key="reden-niet-genoten"></textarea>
+    </p>
+    <ul>
+        <li v-for="naam of namen">{{ naam }}</li>
+    </ul>
+    <h2>Namen met index</h2>
+<ul>
+    <li v-for="naam, index of namen">{{ `Rangnummer ${index + 1}: ${naam}` }}</li>
+</ul>
+           
+<h2>Namen met index en verwijderknop</h2>
+<ul>
+    <li v-for="naam, index of namen">
+        {{ `Index ${index}: ${naam}` }}
+        <button @click="verwijderItem(index)">Verwijderen</button>
+    </li>
+</ul>
+<h2>Namen die beginnen met een L</h2>
+<ul>
+    <li v-for="naam of namenMetL">{{ naam }}</li>
+</ul<h2>Object doorlopen</h2>
+<ul>
+    <li v-for="waarde of album">{{ waarde }}</li>
+</ul>
+<h2>Object doorlopen met sleutel</h2>
+<ul>
+    <li v-for="waarde, sleutel of album">{{ sleutel }}: {{ waarde }}</li>
+</ul>     
+        
+<h2>Toon enkel oneven getallen uit een lijst</h2>
+<ul>
+    <li v-for="getal of getallen" v-if="getal % 2 > 0">{{ getal }}</li>
+</ul>
+<h2>Lijst van medewerkers enkel tonen als de gebruiker een admin is:</h2>
+<ul v-if="admin">
+    <li v-for="medewerker of medewerkers">{{ medewerker }}</li>
+</ul>
+<h2>Machten van het getal 2 tot de achtste macht</h2>
+<ul>
+    <li v-for="macht of 8">{{ 2 ** macht }}</li>
+</ul>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titel</th>
+            <th>Prijs</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="boek of boeken" :key="boek.id">
+            <td>{{ boek.titel }}</td>
+            <td>&euro; {{ boek.prijs }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+
+            data: {
+              titel: "Vue zegt hallo!",
+              voornaam: "Joris",
+               naam: "Van Herrewegen",
+               link: "http://www.google.be",
+               url: "https://placeimg.com/640/480/any",
+               getrouwd: true,
+              magVerzenden: true,
+              stijl: {
+                fontSize: "2rem",
+                 // Bewerkingen kunnen geplakt worden aan eenheden zoals px
+                width: (400 / 2) + 'px',
+                textDecoration: "underline"
+              },
+              klassen: {
+                groot: true,
+                // True als het na 17u is
+                vet: new Date().getHours() >= 17
+              },
+            algemeen: {
+                fontStyle: "italic",
+                fontFamily: "Comic Sans Ms"
+            },
+            blok: {
+                rand: true,
+                ruimte: true,
+                 achtergrond: false
+            },
+            teller: 0,
+            tellerA: 0,
+            minimum: 0,
+            maximum: 10,
+            willekeurigGetal: 0,
+
+            invoer: "",
+            smaak: "Vanille",  //standaard aanvinken,
+
+            akkoord: false,
+            // interesses: []  Lege tabel
+            interesses: ["Sport", "Koken"],   //elementen zijn strings die overeenkomen met het value attribuut van de checkboxes.
+            huisdier: "",
+
+            uitgenodigden: [],
+            thema: "banaan",
+
+            tekstgrootte: 14,
+            kopKleur: 'red',
+
+            getallen: [1, 4, 5, 6, 7, 12, 13, 16, 20],
+            ingelogd: false,
+           samenwonend: false,
+            genoten: true,
+            namen: ["Bert", "Tim", "Leen", "Lynn", "Louis"],
+            album: {
+                titel: "Rock Top 100",
+                artiest: "Varia",
+                genre: "Rock"
+            },
+            admin: false,
+            medewerkers: ["Koen", "Debby", "Tania", "Siebe"],
+            boeken: [
+        {
+            id: 1,
+            titel: "Het lot",
+            prijs: 20
+        },
+        {
+            id: 2,
+            titel: "Bloementeelt",
+            prijs: 15
+        },
+        {
+            id: 3,
+            titel: "Reizen door Amerika",
+            prijs: 30
+        }
+    ]
+            
+                    
+            },  //end-data
+
+        computed: {
+           eigenschap() {
+           return waarde;
+           },
+           themaHoofdletters() {
+           return this.thema ? this.thema.toUpperCase() : "onbekend";
+           },
+           kopStijl() {
+            return {
+            fontSize: this.tekstgrootte + 10 + 'px',
+            color: this.kopKleur,
+            textDecoration: new Date().getDay() === 2 ? 'underline' : 'none'
+            }
+           },
+           getallenEven() {
+              return this.getallen.filter(getal => getal % 2 === 0);
+            },
+            namenMetL() {
+                return this.namen.filter(naam => naam[0] === 'L');
+            }
+
+        },    
+
+        methods: {
+        // Plaats de methodes binnen dit object
+        plaatsGroet() {
+            return "Gegroet, Vue-fans!";
+        },
+        deling(a, b) {
+           return a / b;
+        },
+        toonBoodschap() {
+        alert("Welkom bij deze app!");
+        },
+        veranderAchtergrond(event) {
+        /* Het standaard DOM event object geeft toegang tot de target eigenschap.
+           De target eigenschap bevat de referentie naar het element dat het event
+           startte */
+        event.target.style.backgroundColor = "yellow";
+        },
+        veranderAchtergrond(event, kleur) {
+            event.target.style.backgroundColor = kleur;
+        },
+        leegmaken(event) {
+            event.target.value = "";
+        },
+        verklein(event) {
+            event.target.style.width = "100px";
+        },
+        naarHoofdletters(event) {
+            event.target.value = event.target.value.toUpperCase();
+        },
+        genereerGetal() {
+            // Haal gegevens uit het data-object
+            min = this.minimum;
+            max = this.maximum;
+
+            // Genereer een willekeurig getal tussen de minimum- en maximumwaardes
+            // Resultaat is inclusief de minimum- en maximumwaarde
+            this.willekeurigGetal = Math.floor(Math.random() * (max - min + 1)) + min;
+        },
+        toonThema() {
+        return this.thema ? this.thema.toUpperCase() : "onbekend";
+        },
+        verwijderItem(index) {
+        // De array functie splice() verwijdert één of meerdere items
+        // vanaf een bepaalde index, dus splice(index, aantal)
+        this.namen.splice(index, 1);
+    }
+        
+        } //end-methods 
+
+
+        });
+    </script>
+</body>
+</html>
+
